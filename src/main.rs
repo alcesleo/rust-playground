@@ -1,3 +1,6 @@
+mod graph;
+
 fn main() {
-    println!("Hello, world!");
+    let graph = graph::generate_weighted_directed_graph();
+    graph.display();
 }
