@@ -40,6 +40,29 @@ impl Graph {
             println!("");
         }
     }
+
+    pub fn generate(nodes: usize, edges: usize) -> Graph {
+        let mut graph = Graph::new();
+
+        // Create nodes
+        for n in 1..nodes + 1 {
+            let node = Node::new(n.to_string());
+            graph.nodes.push(node);
+        }
+
+        let graph = graph; // Don't need to mutate graph anymore
+
+        // Create edges until desired sparseness has been reached
+        for n in 1..edges + 1 {
+            let origin = graph.random_node();
+            let destination = graph.random_node();
+
+            // Simply use n as the weight, this could also be randomized
+            origin.borrow_mut().connect(destination.clone(), n);
+        }
+
+        graph
+    }
 }
 
 impl Node {
@@ -64,27 +87,4 @@ impl Edge {
             destination: destination,
         }
     }
-}
-
-pub fn generate_weighted_directed_graph(nodes: usize, edges: usize) -> Graph {
-    let mut graph = Graph::new();
-
-    // Create nodes
-    for n in 1..nodes + 1 {
-        let node = Node::new(n.to_string());
-        graph.nodes.push(node);
-    }
-
-    let graph = graph; // Don't need to mutate graph anymore
-
-    // Create edges until desired sparseness has been reached
-    for n in 1..edges + 1 {
-        let origin = graph.random_node();
-        let destination = graph.random_node();
-
-        // Simply use n as the weight, this could also be randomized
-        origin.borrow_mut().connect(destination.clone(), n);
-    }
-
-    graph
 }
