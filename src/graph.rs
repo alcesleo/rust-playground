@@ -1,6 +1,8 @@
 use std::rc::Rc;
 use std::cell::RefCell;
 
+use rand::{thread_rng, Rng};
+
 pub struct Graph {
     nodes: Vec<NodeRef>,
 }
@@ -22,13 +24,17 @@ impl Graph {
         Graph { nodes: Vec::new() }
     }
 
+    fn random_node(&self) -> NodeRef {
+        thread_rng().choose(&self.nodes).unwrap().clone()
+    }
+
     pub fn display(&self) {
         for node in &self.nodes {
             let node = node.borrow();
-            println!("{}", node.name);
+            println!("({})", node.name);
 
             for edge in &node.edges {
-                println!("|--{}--> {}", edge.weight, edge.destination.borrow().name);
+                println!(" |--- {:^3} ---> ({})", edge.weight, edge.destination.borrow().name);
             }
 
             println!("");
@@ -45,8 +51,8 @@ impl Node {
         }))
     }
 
-    fn connect(&mut self, destination: NodeRef) {
-        let edge = Edge::new(destination, 10);
+    fn connect(&mut self, destination: NodeRef, weight: usize) {
+        let edge = Edge::new(destination, weight);
         self.edges.push(edge)
     }
 }
@@ -60,21 +66,25 @@ impl Edge {
     }
 }
 
-pub fn generate_weighted_directed_graph() -> Graph {
-    // Create nodes
-    let a = Node::new("A".to_string());
-    let b = Node::new("B".to_string());
+pub fn generate_weighted_directed_graph(nodes: usize, edges: usize) -> Graph {
+    let mut graph = Graph::new();
 
-    // Connect them
-    {
-        let mut a = a.borrow_mut();
-        a.connect(b.clone());
+    // Create nodes
+    for n in 1..nodes + 1 {
+        let node = Node::new(n.to_string());
+        graph.nodes.push(node);
     }
 
-    // Add them to the graph
-    let mut graph = Graph::new();
-    graph.nodes.push(a);
-    graph.nodes.push(b);
+    let graph = graph; // Don't need to mutate graph anymore
+
+    // Create edges until desired sparseness has been reached
+    for n in 1..edges + 1 {
+        let origin = graph.random_node();
+        let destination = graph.random_node();
+
+        // Simply use n as the weight, this could also be randomized
+        origin.borrow_mut().connect(destination.clone(), n);
+    }
 
     graph
 }
