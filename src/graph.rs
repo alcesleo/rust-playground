@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 use std::cell::RefCell;
 
 use rand::{thread_rng, Rng};
@@ -12,11 +12,12 @@ pub struct Node {
     edges: Vec<Edge>,
 }
 
-type NodeRef = Rc<RefCell<Node>>;
+type NodeRef     = Rc<RefCell<Node>>;
+type WeakNodeRef = Weak<RefCell<Node>>;
 
 pub struct Edge {
     weight: usize,
-    destination: NodeRef,
+    destination: WeakNodeRef,
 }
 
 impl Graph {
@@ -24,8 +25,8 @@ impl Graph {
         Graph { nodes: Vec::new() }
     }
 
-    fn random_node(&self) -> NodeRef {
-        thread_rng().choose(&self.nodes).unwrap().clone()
+    fn random_node(&self) -> &NodeRef {
+        thread_rng().choose(&self.nodes).unwrap()
     }
 
     pub fn display(&self) {
@@ -34,7 +35,8 @@ impl Graph {
             println!("({})", node.name);
 
             for edge in &node.edges {
-                println!(" |--- {:^3} ---> ({})", edge.weight, edge.destination.borrow().name);
+                let destination = edge.destination.upgrade().unwrap();
+                println!(" |--- {:^3} ---> ({})", edge.weight, destination.borrow().name);
             }
 
             println!("");
@@ -57,8 +59,11 @@ impl Graph {
             let origin = graph.random_node();
             let destination = graph.random_node();
 
+            // TODO: Make sure to not connect a node to itself,
+            // or a node it is already connected to
+
             // Simply use n as the weight, this could also be randomized
-            origin.borrow_mut().connect(destination.clone(), n);
+            origin.borrow_mut().connect(destination, n);
         }
 
         graph
@@ -67,21 +72,20 @@ impl Graph {
 
 impl Node {
     fn new(name: String) -> NodeRef {
-        // TODO: Use Weak pointers to prevent memory leaks
         Rc::new(RefCell::new(Node {
             name: name,
             edges: Vec::new(),
         }))
     }
 
-    fn connect(&mut self, destination: NodeRef, weight: usize) {
-        let edge = Edge::new(destination, weight);
+    fn connect(&mut self, destination: &NodeRef, weight: usize) {
+        let edge = Edge::new(Rc::downgrade(destination), weight);
         self.edges.push(edge)
     }
 }
 
 impl Edge {
-    fn new(destination: NodeRef, weight: usize) -> Edge {
+    fn new(destination: WeakNodeRef, weight: usize) -> Edge {
         Edge {
             weight: weight,
             destination: destination,
