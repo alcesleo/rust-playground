@@ -1,4 +1,4 @@
-const SIZE: usize   = 8;
+const SIZE: usize         = 8;
 const EMPTY: &'static str = ".";
 const QUEEN: &'static str = "Q";
 
