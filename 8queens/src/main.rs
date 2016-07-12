@@ -59,8 +59,6 @@ impl Board {
    }
 }
 
-// Recursively finds all solutions, prints them as it finds them
-// and returns the number of found solutions
 fn solve(board: &mut Board, row: usize, found_solutions: &mut usize) {
    if row == SIZE {
       *found_solutions += 1;
