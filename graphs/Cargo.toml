@@ -1,0 +1,7 @@
+[package]
+name = "rust-graphs"
+version = "0.1.0"
+authors = ["Jimmy Börjesson <alcesleo@gmail.com>"]
+
+[dependencies]
+rand = "0.3.14"
