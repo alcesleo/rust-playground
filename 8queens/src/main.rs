@@ -1,6 +1,34 @@
-const SIZE: usize         = 8;
+const SIZE: usize = 8;
 const EMPTY: &'static str = ".";
 const QUEEN: &'static str = "Q";
+
+fn main() {
+   let mut board = Board::new();
+   let mut count = 0;
+   let initial_row = 0;
+
+   solve(&mut board, initial_row, &mut count);
+   println!("Found {} solutions", count);
+}
+
+fn solve(board: &mut Board, row: usize, found_solutions: &mut usize) {
+   if row == SIZE {
+      *found_solutions += 1;
+      board.display();
+      return
+   }
+
+   for col in 0..SIZE {
+      if board.position_threatened(row, col) {
+         continue;
+      }
+
+      board.place_queen(col);
+      solve(board, row + 1, found_solutions);
+
+      board.remove_last_queen();
+   }
+}
 
 struct Board {
    size:   usize,
@@ -57,31 +85,4 @@ impl Board {
       }
       println!("");
    }
-}
-
-fn solve(board: &mut Board, row: usize, found_solutions: &mut usize) {
-   if row == SIZE {
-      *found_solutions += 1;
-      board.display();
-      return
-   }
-
-   for col in 0..SIZE {
-      if board.position_threatened(row, col) {
-         continue;
-      }
-
-      board.place_queen(col);
-      solve(board, row + 1, found_solutions);
-
-      board.remove_last_queen();
-   }
-}
-
-fn main() {
-   let mut board = Board::new();
-   let mut count = 0;
-
-   solve(&mut board, 0, &mut count);
-   println!("Found {} solutions", count);
 }
