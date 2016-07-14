@@ -4,16 +4,16 @@ const QUEEN: &'static str = "Q";
 
 fn main() {
    let mut board = Board::new();
-   let mut count = 0;
+   let mut solutions_count = 0;
    let initial_row = 0;
 
-   solve(&mut board, initial_row, &mut count);
-   println!("Found {} solutions", count);
+   solve(&mut board, initial_row, &mut solutions_count);
+   println!("Found {} solutions", solutions_count);
 }
 
-fn solve(board: &mut Board, row: usize, found_solutions: &mut usize) {
+fn solve(board: &mut Board, row: usize, solutions_count: &mut usize) {
    if row == SIZE {
-      *found_solutions += 1;
+      *solutions_count += 1;
       board.display();
       return
    }
@@ -24,7 +24,7 @@ fn solve(board: &mut Board, row: usize, found_solutions: &mut usize) {
       }
 
       board.place_queen(col);
-      solve(board, row + 1, found_solutions);
+      solve(board, row + 1, solutions_count);
 
       board.remove_last_queen();
    }
