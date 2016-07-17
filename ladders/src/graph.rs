@@ -1,75 +1,56 @@
-pub struct Graph<'a> {
-    nodes: Vec<Node<'a>>,
-}
+use std::collections::HashMap;
 
-pub struct Node<'a> {
-    word: &'a str,
-    edges: Vec<&'a str>
+pub struct Graph<'a> {
+    nodes: HashMap<String, Vec<&'a str>>
 }
 
 impl<'a> Graph<'a> {
     pub fn new() -> Graph<'a> {
-        Graph { nodes: Vec::new() }
+        Graph { nodes: HashMap::new() }
+    }
+
+    pub fn display(&self) {
+        for (node, edges) in &self.nodes {
+            println!("{}", node);
+            for edge in edges {
+                println!(" -> {}", edge);
+            }
+        }
     }
 
     pub fn construct(words: Vec<&'a String>) -> Graph<'a> {
         let mut graph = Graph::new();
 
         for word in &words {
-            let mut node = Node::new(word);
+            for i in 0..word.len() {
+                let bucket = blank_character(word, i);
 
-            for edge in &words {
-                if one_letter_off(word, edge) {
-                    node.edges.push(edge);
-                }
+                graph.connect(bucket, word);
             }
-
-            graph.nodes.push(node);
         }
 
         graph
     }
 
-    pub fn display(&self) {
-        for node in &self.nodes {
-            println!("{}", node.word);
-            for edge in &node.edges {
-                println!(" -> {}", edge);
-            }
+    fn connect(&mut self, node: String, edge: &'a str) {
+        if !self.nodes.contains_key(&node) {
+            self.nodes.insert(node.clone(), Vec::new());
         }
+
+        let edges = self.nodes.get_mut(&node).unwrap();
+
+        edges.push(edge);
     }
 }
 
-impl<'a> Node<'a> {
-    fn new(word: &str) -> Node {
-        Node { word: word, edges: Vec::new() }
-    }
 
-}
-
-fn one_letter_off(a: &str, b: &str) -> bool {
-    if a.len() != b.len() { return false }
-
-    let diff_count =
-        a.chars()
-        .zip(b.chars())
-        .filter(|pair| pair.0 != pair.1)
-        .count();
-
-    diff_count == 1
+fn blank_character(input: &str, index: usize) -> String {
+    let mut result = input.to_string().into_bytes();
+    result[index] = '_' as u8;
+    String::from_utf8(result).unwrap()
 }
 
 #[test]
-fn exactly_one_letter_off() {
-    assert!(one_letter_off("man", "map"));
-}
-
-#[test]
-fn different_length_word() {
-    assert!(!one_letter_off("maps", "map"));
-}
-
-#[test]
-fn two_letters_off() {
-    assert!(!one_letter_off("men", "map"));
+fn blanks_character() {
+    assert_eq!(blank_character("test", 2), "te_t");
 }

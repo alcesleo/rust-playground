@@ -10,8 +10,6 @@ fn main() {
 
     let words: Vec<_> = dict.iter()
                             .filter(|word| word.len() == num_letters)
-                            .skip(7000)
-                            .take(20)
                             .collect();
 
     println!("{}", words.len());
