@@ -24,6 +24,7 @@ fn perform_operation(stack: &mut Vec<i32>, operator: &str) {
         "-" => lhs - rhs,
         "*" => lhs * rhs,
         "/" => lhs / rhs,
+        "^" => lhs.pow(rhs as u32),
         _   => panic!("unsupported operator")
     };
 
@@ -51,6 +52,13 @@ enum Token {
 fn it_correctly_evaluates_postfix() {
     assert_eq!(14, postfix("5 1 2 + 4 * + 3 -"));
 }
+
+
+#[test]
+fn it_correctly_evaluates_postfix_2() {
+    assert_eq!(16, postfix("2 5 ^ 2 /"));
+}
+
 
 #[test]
 #[should_panic(expected = "unsupported operator")]
