@@ -46,50 +46,43 @@ enum Token {
 
 
 
-// Tests
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn it_correctly_evaluates_postfix() {
-    assert_eq!(14, postfix("5 1 2 + 4 * + 3 -"));
-}
-
-
-#[test]
-fn it_correctly_evaluates_postfix_2() {
-    assert_eq!(16, postfix("2 5 ^ 2 /"));
-}
+    #[test]
+    fn it_correctly_evaluates_postfix() {
+        assert_eq!(14, postfix("5 1 2 + 4 * + 3 -"));
+    }
 
 
-#[test]
-#[should_panic(expected = "unsupported operator")]
-fn it_reports_error_when_using_unsupported_operator() {
-    postfix("1 2 =");
-}
+    #[test]
+    fn it_correctly_evaluates_postfix_2() {
+        assert_eq!(16, postfix("2 5 ^ 2 /"));
+    }
 
-#[test]
-#[should_panic(expected = "not enough operators")]
-fn it_reports_error_when_not_having_a_single_result_at_the_end() {
-    postfix("1 2 3 +");
-}
 
-#[test]
-#[should_panic(expected = "not enough operands")]
-fn it_reports_error_when_having_too_many_operators_and_even_stack() {
-    postfix("+");
-}
+    #[test]
+    #[should_panic(expected = "unsupported operator")]
+    fn it_reports_error_when_using_unsupported_operator() {
+        postfix("1 2 =");
+    }
 
-#[test]
-#[should_panic(expected = "not enough operands")]
-fn it_reports_error_when_having_too_many_operators_and_odd_stack() {
-    postfix("1 +");
-}
+    #[test]
+    #[should_panic(expected = "not enough operators")]
+    fn it_reports_error_when_not_having_a_single_result_at_the_end() {
+        postfix("1 2 3 +");
+    }
 
-#[test]
-fn it_parses_operands() {
-    assert_eq!(Token::Operand(5), parse("5"));
-}
+    #[test]
+    #[should_panic(expected = "not enough operands")]
+    fn it_reports_error_when_having_too_many_operators_and_even_stack() {
+        postfix("+");
+    }
 
-#[test]
-fn it_parses_operators() {
-    assert_eq!(Token::Operator("+".to_string()), parse("+"));
+    #[test]
+    #[should_panic(expected = "not enough operands")]
+    fn it_reports_error_when_having_too_many_operators_and_odd_stack() {
+        postfix("1 +");
+    }
 }
