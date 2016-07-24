@@ -44,8 +44,6 @@ enum Token {
     Operand(i32),
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -55,12 +53,10 @@ mod tests {
         assert_eq!(14, postfix("5 1 2 + 4 * + 3 -"));
     }
 
-
     #[test]
     fn it_correctly_evaluates_postfix_2() {
         assert_eq!(16, postfix("2 5 ^ 2 /"));
     }
-
 
     #[test]
     #[should_panic(expected = "unsupported operator")]
