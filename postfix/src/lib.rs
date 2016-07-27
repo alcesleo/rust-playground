@@ -1,3 +1,5 @@
+mod infix_to_postfix;
+
 pub fn postfix(input: &str) -> i32 {
     let mut stack = Vec::new();
     
