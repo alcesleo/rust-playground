@@ -1,7 +1,7 @@
 pub fn infix_to_postfix(input: &str) -> String {
     let mut result = Vec::new();
     let mut stack  = Vec::new();
-    
+
     for token in input.split_whitespace() {
         match parse(token) {
             Token::Number(n)  => result.push(n.to_string()),
@@ -14,7 +14,7 @@ pub fn infix_to_postfix(input: &str) -> String {
             },
             Token::Operator(op) => {
                 while let Some(top) = stack.pop() {
-                    
+
                     if precedence(&top) < precedence(&op)
                         || (precedence(&top) == precedence(&op)
                             && is_right_associative(&op))
@@ -57,9 +57,8 @@ fn parse(token: &str) -> Token {
             match token {
                 "(" => Token::LeftParen,
                 ")" => Token::RightParen,
-                _   => Token::Operator(token.to_string()),   
+                _   => Token::Operator(token.to_string()),
             }
-            
         }
     }
 }
