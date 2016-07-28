@@ -11,7 +11,11 @@ pub struct OpInfo {
     pub right_associative: bool,
 }
 
-pub fn parse(token: &str) -> Token {
+pub fn parse(input: &str) -> Vec<Token> {
+    input.split_whitespace().map(|token| parse_token(token)).collect()
+}
+
+fn parse_token(token: &str) -> Token {
     match token.parse() {
         Ok(n)  => Token::Number(n),
         Err(_) => {

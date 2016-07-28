@@ -10,8 +10,8 @@ pub fn infix_to_postfix(input: &str) -> String {
     let mut result = Vec::new();
     let mut stack  = Vec::new();
 
-    for token in input.split_whitespace() {
-        match parse(token) {
+    for token in parse(input) {
+        match token {
             Token::Number(n)    => result.push(n.to_string()),
             Token::LeftParen    => stack.push(StackToken::LeftParen),
             Token::RightParen   => pop_until_paren(&mut stack, &mut result),
