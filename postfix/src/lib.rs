@@ -1,4 +1,4 @@
-mod parser;
+mod infix_parser;
 mod infix_to_postfix;
 
 pub fn postfix(input: &str) -> i32 {

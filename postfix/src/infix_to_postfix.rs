@@ -1,4 +1,4 @@
-use parser::{parse, Token, OpInfo};
+use infix_parser::{parse, Token, OpInfo};
 
 // Numbers and right-parens should never be on the stack
 enum StackToken {
