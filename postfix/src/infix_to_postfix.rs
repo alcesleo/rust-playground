@@ -20,8 +20,11 @@ pub fn infix_to_postfix(input: &str) -> String {
     }
 
     // Pop the rest of the stack onto the result
-    while let Some(StackToken::Operator(op)) = stack.pop() {
-        result.push(op.sign);
+    while let Some(token) = stack.pop() {
+        match token {
+            StackToken::Operator(op) => result.push(op.sign),
+            StackToken::LeftParen    => panic!("unbalanced parentheses"),
+        }
     }
 
     result.join(" ")
@@ -39,7 +42,7 @@ fn push_under_prioritized(mut stack: &mut Vec<StackToken>, result: &mut Vec<Stri
     while should_pop_before_pushing_operator(&mut stack, &op) {
         match stack.pop().unwrap() {
             StackToken::Operator(op) => result.push(op.sign),
-            _ => panic!("")
+            _ => panic!("parentheses found where there should never be one")
         }
     }
 
@@ -71,5 +74,11 @@ mod tests {
     #[test]
     fn it_converts_infix_to_postfix_with_parentheses() {
         assert_eq!("5 1 2 + 4 * + 3 -", infix_to_postfix("5 + ( 1 + 2 ) * 4 - 3"));
+    }
+
+    #[test]
+    #[should_panic (expected = "unbalanced parentheses")]
+    fn it_detects_unbalanced_parentheses() {
+        infix_to_postfix("5 * ( 6 + 3");
     }
 }
