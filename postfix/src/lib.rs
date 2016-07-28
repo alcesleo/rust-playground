@@ -1,8 +1,9 @@
+mod parser;
 mod infix_to_postfix;
 
 pub fn postfix(input: &str) -> i32 {
     let mut stack = Vec::new();
-    
+
     for token in input.split_whitespace() {
         match parse(token) {
             Token::Operand(n)   => stack.push(n),
