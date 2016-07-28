@@ -49,8 +49,8 @@ fn push_under_prioritized(mut stack: &mut Vec<StackToken>, result: &mut Vec<Stri
     stack.push(StackToken::Operator(op));
 }
 
-// Returns an OpInfo if that operator needs to be popped before token
-// is put on the stack with regards to operator precedence and
+// Returns whether operators needs to be popped off the stack before
+// token is put on the stack with regards to operator precedence and
 // associativity
 fn should_pop_before_pushing_operator(stack: &mut Vec<StackToken>, token: &OpInfo) -> bool {
     return match stack.last() {
