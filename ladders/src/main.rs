@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::{BufReader, BufRead};
+use std::io::Read;
 
 mod graph;
 use graph::Graph;
@@ -19,13 +19,10 @@ fn main() {
 }
 
 fn dictionary() -> Vec<String> {
-    let f          = File::open("/usr/share/dict/words").unwrap();
-    let file       = BufReader::new(f);
-    let mut result = Vec::new();
+    let mut file   = File::open("/usr/share/dict/words").unwrap();
+    let mut result = String::new();
 
-    for line in file.lines() {
-        result.push(line.unwrap());
-    }
+    file.read_to_string(&mut result);
 
-    result
+    result.split("\n").map(str::to_string).collect()
 }
