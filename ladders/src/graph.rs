@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 pub struct Graph<'a> {
-    pub nodes: HashMap<String, Vec<&'a str>>
+    nodes: HashMap<String, Vec<&'a str>>
 }
 
 impl<'a> Graph<'a> {
@@ -47,6 +47,14 @@ impl<'a> Graph<'a> {
         }
 
         graph
+    }
+
+    pub fn edges(&self, node: &str) -> &Vec<&'a str> {
+        self.nodes.get(node).unwrap()
+    }
+
+    pub fn nodes(&self) -> Vec<&String> {
+        self.nodes.keys().collect()
     }
 
     fn connect(&mut self, node: String, edge: &'a str) {

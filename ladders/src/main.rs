@@ -14,9 +14,9 @@ fn main() {
     let words = dictionary(max_letters);
 
     let graph = Graph::construct(&words);
-    // graph.display();
 
     find_word_ladder(&graph, "right", "wrong");
+    find_word_ladder(&graph, "cold", "warm");
 }
 
 fn find_word_ladder(graph: &Graph, start: &str, end: &str) {
@@ -24,7 +24,7 @@ fn find_word_ladder(graph: &Graph, start: &str, end: &str) {
     let mut prev: HashMap<&str, &str>  = HashMap::new();
     let mut queue = LinkedList::new();
 
-    for word in graph.nodes.keys() {
+    for word in graph.nodes() {
         dist.insert(word, INF);
     }
 
@@ -34,7 +34,7 @@ fn find_word_ladder(graph: &Graph, start: &str, end: &str) {
     while !queue.is_empty() {
         let current = queue.pop_front().unwrap();
 
-        for edge in graph.nodes.get(current).unwrap() {
+        for edge in graph.edges(current) {
             if *dist.get(edge).unwrap() == INF {
                 let new_dist = dist.get(current).unwrap() + 1;
                 dist.insert(edge, new_dist);
@@ -44,6 +44,7 @@ fn find_word_ladder(graph: &Graph, start: &str, end: &str) {
         }
     }
 
+    // Walk backwards over prev to extract the found path
     let mut result = LinkedList::new();
     let mut current = end;
     result.push_back(end);
