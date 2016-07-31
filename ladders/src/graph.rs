@@ -18,14 +18,31 @@ impl<'a> Graph<'a> {
         }
     }
 
-    pub fn construct(words: Vec<&'a String>) -> Graph<'a> {
-        let mut graph = Graph::new();
+    pub fn construct(words: &'a Vec<String>) -> Graph<'a> {
+        // First create a graph where a bucket id (a word with a blank
+        // character, e.g. "c_t") has edges to each word that fits
+        // into that bucket
+        let mut bucket_graph = Graph::new();
 
-        for word in &words {
+        for word in words {
             for i in 0..word.len() {
                 let bucket = blank_character(word, i);
 
-                graph.connect(bucket, word);
+                bucket_graph.connect(bucket, word);
+            }
+        }
+
+        // Create the actual graph by going through the buckets and
+        // connecting every word to its neighbours
+        let mut graph = Graph::new();
+
+        for edges in bucket_graph.nodes.values() {
+            for edge1 in edges {
+                for edge2 in edges {
+                    if edge1 != edge2 {
+                        graph.connect(edge1.to_string(), edge2);
+                    }
+                }
             }
         }
 
