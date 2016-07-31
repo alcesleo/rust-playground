@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 pub struct Graph<'a> {
-    nodes: HashMap<String, Vec<&'a str>>
+    pub nodes: HashMap<String, Vec<&'a str>>
 }
 
 impl<'a> Graph<'a> {
