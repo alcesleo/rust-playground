@@ -50,13 +50,10 @@ impl<'a> Graph<'a> {
     }
 
     fn connect(&mut self, node: String, edge: &'a str) {
-        if !self.nodes.contains_key(&node) {
-            self.nodes.insert(node.clone(), Vec::new());
-        }
-
-        let edges = self.nodes.get_mut(&node).unwrap();
-
-        edges.push(edge);
+        self.nodes
+            .entry(node)
+            .or_insert_with(Vec::new)
+            .push(edge);
     }
 }
 
