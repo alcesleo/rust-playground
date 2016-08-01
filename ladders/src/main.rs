@@ -15,11 +15,15 @@ fn main() {
 
     let graph = Graph::construct(&words);
 
-    find_word_ladder(&graph, "right", "wrong");
-    find_word_ladder(&graph, "cold", "warm");
+    print_word_ladder(&graph, "cold", "warm");
+    print_word_ladder(&graph, "right", "wrong");
 }
 
-fn find_word_ladder(graph: &Graph, start: &str, end: &str) {
+fn print_word_ladder(graph: &Graph, start: &str, end: &str) {
+    println!("{}", find_word_ladder(graph, start, end).join(" -> "));
+}
+
+fn find_word_ladder(graph: &Graph, start: &str, end: &str) -> Vec<String> {
     let mut dist: HashMap<&str, usize> = HashMap::new();
     let mut prev: HashMap<&str, &str>  = HashMap::new();
     let mut queue = LinkedList::new();
@@ -44,22 +48,22 @@ fn find_word_ladder(graph: &Graph, start: &str, end: &str) {
         }
     }
 
-    println!("{}", extract_path(prev, end));
+    extract_path(prev, end)
 }
 
 // Traverses the prev-map backwards to extract the path from the beginning to end
-fn extract_path(prev: HashMap<&str, &str>, end: &str) -> String {
+fn extract_path(prev: HashMap<&str, &str>, end: &str) -> Vec<String> {
     let mut result  = Vec::new();
     let mut current = end;
 
-    result.push(end);
+    result.push(current.to_string());
 
     while let Some(word) = prev.get(current) {
-        result.insert(0, word);
+        result.insert(0, word.to_string());
         current = word;
     }
 
-    result.join(" -> ")
+    result
 }
 
 fn dictionary(length_limit: usize) -> Vec<String> {
