@@ -44,17 +44,22 @@ fn find_word_ladder(graph: &Graph, start: &str, end: &str) {
         }
     }
 
-    // Walk backwards over prev to extract the found path
-    let mut result = LinkedList::new();
+    println!("{}", extract_path(prev, end));
+}
+
+// Traverses the prev-map backwards to extract the path from the beginning to end
+fn extract_path(prev: HashMap<&str, &str>, end: &str) -> String {
+    let mut result  = Vec::new();
     let mut current = end;
-    result.push_back(end);
+
+    result.push(end);
 
     while let Some(word) = prev.get(current) {
-        result.push_front(word);
+        result.insert(0, word);
         current = word;
     }
 
-    println!("{:?}", result);
+    result.join(" -> ")
 }
 
 fn dictionary(length_limit: usize) -> Vec<String> {
