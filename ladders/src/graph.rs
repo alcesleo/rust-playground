@@ -9,15 +9,6 @@ impl<'a> Graph<'a> {
         Graph { nodes: HashMap::new() }
     }
 
-    pub fn display(&self) {
-        for (node, edges) in &self.nodes {
-            println!("{}", node);
-            for edge in edges {
-                println!(" -> {}", edge);
-            }
-        }
-    }
-
     pub fn construct(words: &'a Vec<String>) -> Graph<'a> {
         // First create a graph where a bucket id (a word with a blank
         // character, e.g. "c_t") has edges to each word that fits
@@ -27,7 +18,6 @@ impl<'a> Graph<'a> {
         for word in words {
             for i in 0..word.len() {
                 let bucket = blank_character(word, i);
-
                 bucket_graph.connect(bucket, word);
             }
         }

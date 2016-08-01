@@ -1,19 +1,17 @@
 use std::fs::File;
 use std::io::Read;
-use std::collections::HashMap;
-use std::collections::LinkedList;
+use std::collections::{HashMap, LinkedList};
 use std::usize;
-
-const INF: usize = usize::MAX;
 
 mod graph;
 use graph::Graph;
 
+const INF: usize = usize::MAX;
+
 fn main() {
     let max_letters = 5;
-    let words = dictionary(max_letters);
-
-    let graph = Graph::construct(&words);
+    let words       = dictionary(max_letters);
+    let graph       = Graph::construct(&words);
 
     print_word_ladder(&graph, "cold", "warm");
     print_word_ladder(&graph, "right", "wrong");
