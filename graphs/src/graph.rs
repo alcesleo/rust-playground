@@ -12,7 +12,7 @@ pub struct Node {
     edges: Vec<Edge>,
 }
 
-type NodeRef     = Rc<RefCell<Node>>;
+type NodeRef = Rc<RefCell<Node>>;
 type WeakNodeRef = Weak<RefCell<Node>>;
 
 pub struct Edge {
@@ -36,7 +36,9 @@ impl Graph {
 
             for edge in &node.edges {
                 let destination = edge.destination.upgrade().unwrap();
-                println!(" |--- {:^3} ---> ({})", edge.weight, destination.borrow().name);
+                println!(" |--- {:^3} ---> ({})",
+                         edge.weight,
+                         destination.borrow().name);
             }
 
             println!("");

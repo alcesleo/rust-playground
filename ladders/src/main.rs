@@ -10,8 +10,8 @@ const INF: usize = usize::MAX;
 
 fn main() {
     let max_letters = 5;
-    let words       = dictionary(max_letters);
-    let graph       = Graph::construct(&words);
+    let words = dictionary(max_letters);
+    let graph = Graph::construct(&words);
 
     print_word_ladder(&graph, "cold", "warm");
     print_word_ladder(&graph, "right", "wrong");
@@ -23,7 +23,7 @@ fn print_word_ladder(graph: &Graph, start: &str, end: &str) {
 
 fn find_word_ladder(graph: &Graph, start: &str, end: &str) -> Vec<String> {
     let mut dist: HashMap<&str, usize> = HashMap::new();
-    let mut prev: HashMap<&str, &str>  = HashMap::new();
+    let mut prev: HashMap<&str, &str> = HashMap::new();
     let mut queue = LinkedList::new();
 
     for word in graph.nodes() {
@@ -51,7 +51,7 @@ fn find_word_ladder(graph: &Graph, start: &str, end: &str) -> Vec<String> {
 
 // Traverses the prev-map backwards to extract the path from the beginning to end
 fn extract_path(prev: HashMap<&str, &str>, end: &str) -> Vec<String> {
-    let mut result  = Vec::new();
+    let mut result = Vec::new();
     let mut current = end;
 
     result.push(current.to_string());
@@ -65,13 +65,12 @@ fn extract_path(prev: HashMap<&str, &str>, end: &str) -> Vec<String> {
 }
 
 fn dictionary(length_limit: usize) -> Vec<String> {
-    let mut file   = File::open("/usr/share/dict/words").unwrap();
+    let mut file = File::open("/usr/share/dict/words").unwrap();
     let mut result = String::new();
 
     file.read_to_string(&mut result);
 
-    result
-        .split("\n")
+    result.split("\n")
         .map(str::to_string)
         .filter(|word| word.len() <= length_limit)
         .collect()
